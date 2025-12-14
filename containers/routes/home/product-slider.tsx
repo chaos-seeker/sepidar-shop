@@ -180,16 +180,7 @@ const Product = (props: ProductProps): React.ReactElement => {
       <div className="relative w-full aspect-square overflow-hidden bg-gray-100">
         <div className="product-overlay absolute inset-0 bg-black/20 flex items-center justify-center gap-3 z-20 pointer-events-none">
           <ModalProductPreviewBtn product={props.product} />
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-            className="bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all duration-200 border border-transparent hover:border-primary pointer-events-auto"
-          >
-            <Heart className="w-5 h-5" />
-          </button>
+          <AddToWishListBtn product={props.product} />
         </div>
         {discountPercent && (
           <div className="absolute top-2 left-2 bg-primary text-white text-sm font-bold py-1 px-2 rounded-lg z-10">
@@ -280,6 +271,28 @@ const Product = (props: ProductProps): React.ReactElement => {
         )}
       </div>
     </Link>
+  );
+};
+
+interface AddToWishListBtnProps {
+  product: Awaited<ReturnType<typeof getProductSlider>>['data'][0];
+}
+
+const AddToWishListBtn = (props: AddToWishListBtnProps): React.ReactElement => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // TODO: Add to wishlist logic here
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleClick}
+      className="bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all duration-200 border border-transparent hover:border-primary pointer-events-auto"
+    >
+      <Heart className="w-5 h-5" />
+    </button>
   );
 };
 

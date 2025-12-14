@@ -29,4 +29,3 @@ export async function getCategories(): Promise<IResponse[]> {
   });
   return res.data.categories;
 }
-

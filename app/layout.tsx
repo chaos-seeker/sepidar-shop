@@ -1,5 +1,7 @@
 import './globals.css';
 import Providers from './providers';
+import { getCart } from '@/actions/global/get-cart';
+import { setGuestToken } from '@/actions/global/set-guest-token';
 import BaseLayout from '@/containers/layouts/base';
 import { cn } from '@/utils/cn';
 import type { Metadata } from 'next';
@@ -18,6 +20,9 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout(props: PropsWithChildren) {
+  const cart = await getCart();
+  setGuestToken(cart.cart.guest_token!);
+
   return (
     <html dir="rtl" lang="fa">
       <body className={cn(iransansx.className)}>
