@@ -1,12 +1,12 @@
 // components/scroll-animation.tsx
-"use client";
+'use client';
 
-import { motion, useInView } from "framer-motion";
-import { PropsWithChildren, useRef } from "react";
+import { motion, useInView } from 'framer-motion';
+import { PropsWithChildren, useRef } from 'react';
 
-export default function ScrollAnimation(props: PropsWithChildren) {
+export const ScrollAnimation = (props: PropsWithChildren) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
 
   return (
     <motion.div
@@ -16,10 +16,10 @@ export default function ScrollAnimation(props: PropsWithChildren) {
       transition={{
         duration: 0.5,
         delay: 0,
-        ease: "easeOut",
+        ease: 'easeOut',
       }}
     >
       {props.children}
     </motion.div>
   );
-}
+};
