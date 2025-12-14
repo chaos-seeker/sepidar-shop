@@ -1,6 +1,6 @@
-"use server";
+'use server';
 
-import { fetcher } from "@/utils/fetcher";
+import { fetcher } from '@/utils/fetcher';
 
 interface IResponse {
   id: number;
@@ -260,17 +260,15 @@ interface IResponse {
 interface IParams {
   query: {
     language: string;
-  }
+  };
 }
 
 export async function getSettings(params: IParams): Promise<IResponse> {
   const res = await fetcher<IResponse>({
-    endpoint: "/settings",
-    method: "get",
-    contentType: "json",
+    endpoint: '/settings',
+    method: 'get',
+    contentType: 'json',
     query: params.query,
   });
   return res.data;
 }
-
-

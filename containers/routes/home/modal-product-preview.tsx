@@ -163,13 +163,13 @@ export const ModalProductPreview = (props: ModalProductPreviewProps) => {
                     onClick={handlePrevImage}
                     className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all opacity-0 group-hover:opacity-100"
                   >
-                    <ChevronRight className="w-5 h-5" />
+                    <ChevronLeft className="w-5 h-5" />
                   </button>
                   <button
                     onClick={handleNextImage}
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all opacity-0 group-hover:opacity-100"
                   >
-                    <ChevronLeft className="w-5 h-5" />
+                    <ChevronRight className="w-5 h-5" />
                   </button>
                 </>
               )}
@@ -185,7 +185,10 @@ export const ModalProductPreview = (props: ModalProductPreviewProps) => {
               )}
             </div>
             {allImages.length > 1 && (
-              <div className="flex gap-2 overflow-x-auto pb-2">
+              <div
+                className="flex gap-2 overflow-x-auto pb-2 justify-center"
+                dir="ltr"
+              >
                 {allImages.map((image, index) => (
                   <button
                     key={index}

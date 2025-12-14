@@ -1,10 +1,10 @@
-import type { Metadata } from 'next';
 import './globals.css';
-import localFont from 'next/font/local';
-import { cn } from '@/utils/cn';
-import { PropsWithChildren } from 'react';
-import BaseLayout from '@/containers/layouts/base';
 import Providers from './providers';
+import BaseLayout from '@/containers/layouts/base';
+import { cn } from '@/utils/cn';
+import type { Metadata } from 'next';
+import localFont from 'next/font/local';
+import { PropsWithChildren } from 'react';
 
 const iransansx = localFont({
   src: '../public/fonts/iransansx/IRANSansXV.woff2',

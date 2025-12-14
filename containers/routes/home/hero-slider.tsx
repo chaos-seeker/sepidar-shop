@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import Image from "next/image";
-import { useRef } from "react";
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { getSettings } from "@/actions/global/get-settings";
-import Link from "next/link";
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import { getSettings } from '@/actions/global/get-settings';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRef } from 'react';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 interface HeroSliderProps {
-  data: Awaited<ReturnType<typeof getSettings>>["options"]["sliders"];
+  data: Awaited<ReturnType<typeof getSettings>>['options']['sliders'];
 }
 
 export const HeroSlider = (props: HeroSliderProps) => {
@@ -25,13 +25,13 @@ export const HeroSlider = (props: HeroSliderProps) => {
         spaceBetween={0}
         slidesPerView={1}
         navigation={{
-          nextEl: ".hero-slider-prev",
-          prevEl: ".hero-slider-next",
+          nextEl: '.hero-slider-prev',
+          prevEl: '.hero-slider-next',
         }}
         pagination={{
           clickable: true,
-          bulletClass: "hero-slider-bullet",
-          bulletActiveClass: "hero-slider-bullet-active",
+          bulletClass: 'hero-slider-bullet',
+          bulletActiveClass: 'hero-slider-bullet-active',
         }}
         autoplay={{
           delay: 5000,
@@ -50,7 +50,7 @@ export const HeroSlider = (props: HeroSliderProps) => {
       >
         {props.data?.map((slide) => (
           <SwiperSlide key={slide.img}>
-            <Link href={"/"} className="block w-full h-full cursor-pointer">
+            <Link href={'/'} className="block w-full h-full cursor-pointer">
               <Image
                 src={`${process.env.NEXT_PUBLIC_File_URL}/${slide.img}`}
                 alt="اسلاید"
@@ -75,7 +75,7 @@ export const HeroSlider = (props: HeroSliderProps) => {
           <ChevronRight className="size-6" />
         </div>
       </div>
-      <style jsx global>{`
+      <style>{`
         .hero-slider-pagination {
           bottom: 16px !important;
           display: flex !important;

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import "swiper/css";
-import Image from "next/image";
-import { Autoplay } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { getCategories } from "@/actions/global/get-categories";
-import Link from "next/link";
+import 'swiper/css';
+import { getCategories } from '@/actions/global/get-categories';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Autoplay } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 interface CategoriesProps {
   categories: Awaited<ReturnType<typeof getCategories>>;
@@ -26,8 +26,8 @@ export const Categories = (props: CategoriesProps) => {
         className="w-full"
       >
         {props.categories?.map((category) => (
-          <SwiperSlide key={category.id} style={{ width: "fit-content" }}>
-            <div className="flex flex-col items-center group-hover:opacity-90 hover:!opacity-100 transition-opacity duration-300 h-full w-fit">
+          <SwiperSlide key={category.id} style={{ width: 'fit-content' }}>
+            <div className="flex flex-col items-center group-hover:opacity-90 hover:opacity-100! transition-opacity duration-300 h-full w-fit">
               <Link
                 href={`/products?categories=${JSON.stringify([category.id])}`}
                 className="block border-gray-300 w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 relative rounded-full overflow-hidden border-2 hover:border-primary transition-all duration-300 active:scale-95 bg-gray-100"
