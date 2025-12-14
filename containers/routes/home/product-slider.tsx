@@ -291,6 +291,7 @@ const ModalProductPreviewBtn = (
   props: ModalProductPreviewBtnProps,
 ): React.ReactElement => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
@@ -299,13 +300,15 @@ const ModalProductPreviewBtn = (
     e.preventDefault();
     e.stopPropagation();
     setIsOpen(true);
+    setTimeout(() => setIsAnimating(true), 10);
   };
   const handleClose = (e?: React.MouseEvent) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
-    setIsOpen(false);
+    setIsAnimating(false);
+    setTimeout(() => setIsOpen(false), 300);
   };
   const getUniqueAttributes = (
     variations: Awaited<
@@ -390,6 +393,7 @@ const ModalProductPreviewBtn = (
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
+      setIsAnimating(false);
     }
     return () => {
       document.body.style.overflow = '';
@@ -421,12 +425,18 @@ const ModalProductPreviewBtn = (
   const modalElement = isOpen ? (
     <div
       key={props.product.id}
-      className="fixed inset-0 bg-black/50 z-9999 flex items-center justify-center p-4"
+      className={`fixed inset-0 bg-black/50 z-9999 flex items-center justify-center p-4 transition-opacity duration-300 ${
+        isAnimating ? 'opacity-100' : 'opacity-0'
+      }`}
       onClick={handleClose}
       style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
     >
       <div
-        className="bg-white rounded-lg max-w-[800px] w-full max-h-[90vh] overflow-y-auto"
+        className={`bg-white rounded-lg max-w-[800px] w-full max-h-[90vh] overflow-y-auto transition-all duration-300 ${
+          isAnimating
+            ? 'opacity-100 scale-100 translate-y-0'
+            : 'opacity-0 scale-95 translate-y-4'
+        }`}
         onClick={(e) => e.stopPropagation()}
         dir="rtl"
       >
