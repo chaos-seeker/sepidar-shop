@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'api.mirashjacket.ir',
       },
+      {
+        protocol: 'https',
+        hostname: 'api.shabestaristore.ir',
+      },
+      {
+        protocol: 'https',
+        hostname: 'dev.sepidargroup.com',
+      },
     ],
   },
 };

@@ -2,7 +2,6 @@
 
 import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 import { getProductSlider } from '@/actions/routes/home/get-product-slider';
 import { cn } from '@/utils/cn';
 import { formatPrice } from '@/utils/format';
@@ -11,7 +10,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import type { Swiper as SwiperType } from 'swiper';
+import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 interface IProductSliderProps {
@@ -21,19 +21,20 @@ interface IProductSliderProps {
 
 export const ProductSlider = (props: IProductSliderProps) => {
   const products = props.data?.data || [];
+  const [isBeginning, setIsBeginning] = useState(true);
+  const [isEnd, setIsEnd] = useState(false);
+  const [swiper, setSwiper] = useState<SwiperType | null>(null);
+
+  // Update navigation when slide state changes
+  useEffect(() => {
+    if (swiper) {
+      swiper.navigation?.update();
+    }
+  }, [swiper, isBeginning, isEnd]);
 
   return (
     <>
       <style>{`
-        .product-swiper .swiper-pagination-bullet {
-          background: var(--color-primary);
-          opacity: 0.3;
-        }
-
-        .product-swiper .swiper-pagination-bullet-active {
-          opacity: 1;
-        }
-
         .product-card .product-overlay {
           opacity: 0;
           transition: opacity 0.3s;
@@ -43,8 +44,8 @@ export const ProductSlider = (props: IProductSliderProps) => {
           opacity: 1;
         }
 
-        .slider-group:hover .product-swiper-prev,
-        .slider-group:hover .product-swiper-next {
+        .slider-group:hover .product-swiper-prev:not(.swiper-button-disabled),
+        .slider-group:hover .product-swiper-next:not(.swiper-button-disabled) {
           opacity: 1;
         }
       `}</style>
@@ -63,20 +64,13 @@ export const ProductSlider = (props: IProductSliderProps) => {
           {products.length > 0 ? (
             <div className="relative">
               <Swiper
-                modules={[Navigation, Autoplay, Pagination]}
+                modules={[Navigation]}
                 spaceBetween={16}
                 slidesPerView={2}
                 slidesPerGroup={2}
                 navigation={{
-                  nextEl: '.product-swiper-prev',
-                  prevEl: '.product-swiper-next',
-                }}
-                pagination={{
-                  clickable: true,
-                }}
-                autoplay={{
-                  delay: 5000,
-                  disableOnInteraction: false,
+                  nextEl: '.product-swiper-next',
+                  prevEl: '.product-swiper-prev',
                 }}
                 breakpoints={{
                   640: {
@@ -94,6 +88,20 @@ export const ProductSlider = (props: IProductSliderProps) => {
                 }}
                 className="product-swiper"
                 dir="rtl"
+                onSwiper={(swiperInstance) => {
+                  setSwiper(swiperInstance);
+                  setIsBeginning(swiperInstance.isBeginning);
+                  setIsEnd(swiperInstance.isEnd);
+                  // Update navigation after swiper initializes to ensure buttons are found
+                  setTimeout(() => {
+                    swiperInstance.navigation?.init();
+                    swiperInstance.navigation?.update();
+                  }, 100);
+                }}
+                onSlideChange={(swiperInstance) => {
+                  setIsBeginning(swiperInstance.isBeginning);
+                  setIsEnd(swiperInstance.isEnd);
+                }}
               >
                 {products.map((product) => (
                   <SwiperSlide key={product.id}>
@@ -101,16 +109,20 @@ export const ProductSlider = (props: IProductSliderProps) => {
                   </SwiperSlide>
                 ))}
               </Swiper>
-              <div className="product-swiper-prev absolute -left-4 top-1/2 -translate-y-1/2 z-10 cursor-pointer opacity-0 slider-group:hover:opacity-100 transition-opacity duration-300">
-                <div className="flex items-center justify-center w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-colors duration-300">
-                  <ChevronLeft className="size-6" />
+              {!isEnd && (
+                <div className="product-swiper-prev absolute -left-4 top-1/2 -translate-y-1/2 z-10 cursor-pointer opacity-0 slider-group:hover:opacity-100 transition-opacity duration-300">
+                  <div className="flex items-center justify-center w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-colors duration-300">
+                    <ChevronLeft className="size-6" />
+                  </div>
                 </div>
-              </div>
-              <div className="product-swiper-next absolute -right-3 top-1/2 -translate-y-1/2 z-10 cursor-pointer opacity-0 slider-group:hover:opacity-100 transition-opacity duration-300">
-                <div className="flex items-center justify-center w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-colors duration-300">
-                  <ChevronRight className="size-6" />
+              )}
+              {!isBeginning && (
+                <div className="product-swiper-next absolute -right-3 top-1/2 -translate-y-1/2 z-10 cursor-pointer opacity-0 slider-group:hover:opacity-100 transition-opacity duration-300">
+                  <div className="flex items-center justify-center w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-colors duration-300">
+                    <ChevronRight className="size-6" />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           ) : (
             <div className="text-center py-8 text-gray-500">

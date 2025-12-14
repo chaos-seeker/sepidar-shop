@@ -5,60 +5,60 @@ type FetcherResponse<T> = {
 
 interface FetcherParams {
   endpoint: string;
-  method: "get" | "post" | "put" | "patch" | "delete";
-  contentType: "json" | "formdata";
+  method: 'get' | 'post' | 'put' | 'patch' | 'delete';
+  contentType: 'json' | 'formdata';
   body?: Record<
     string,
     string | number | boolean | Blob | File | null | undefined
   >;
   query?: Record<string, string | number | boolean | null | undefined>;
   path?: string;
-  tokenType?: "user" | "guest";
+  tokenType?: 'user' | 'guest';
 }
 
 export async function fetcher<T>(
-  params: FetcherParams
+  params: FetcherParams,
 ): Promise<FetcherResponse<T>> {
   try {
-    const isServer = typeof window === "undefined";
+    const isServer = typeof window === 'undefined';
     let tokenGuest: string | undefined;
     let tokenUser: string | undefined;
 
     if (isServer) {
-      const { cookies } = await import("next/headers");
+      const { cookies } = await import('next/headers');
       const cookieStore = await cookies();
-      tokenGuest = cookieStore.get("guest_token")?.value;
-      tokenUser = cookieStore.get("token")?.value;
+      tokenGuest = cookieStore.get('token-guest')?.value;
+      tokenUser = cookieStore.get('token-user')?.value;
     } else {
       const parseCookie = (name: string) => {
         const match = document.cookie.match(
-          new RegExp("(^| )" + name + "=([^;]+)")
+          new RegExp('(^| )' + name + '=([^;]+)'),
         );
         return match ? decodeURIComponent(match[2]) : undefined;
       };
-      tokenGuest = parseCookie("guest_token");
-      tokenUser = parseCookie("token");
+      tokenGuest = parseCookie('token-guest');
+      tokenUser = parseCookie('token-user');
     }
 
     const baseUrl = process.env.NEXT_PUBLIC_API_URL;
     const headers: Record<string, string> = {};
     const method = params.method.toUpperCase();
-    let query = "";
+    let query = '';
     if (params.query) {
       query = `?${new URLSearchParams(params.query as Record<string, string>)}`;
     }
-    if (params.tokenType === "user" && tokenUser) {
-      headers["Authorization"] = `Bearer ${tokenUser}`;
-    } else if (params.tokenType === "guest" && tokenGuest) {
-      headers["Authorization"] = `Bearer ${tokenGuest}`;
+    if (params.tokenType === 'user' && tokenUser) {
+      headers['Authorization'] = `Bearer ${tokenUser}`;
+    } else if (params.tokenType === 'guest' && tokenGuest) {
+      headers['Authorization'] = `Bearer ${tokenGuest}`;
     }
     let body: BodyInit | undefined;
-    if (params.contentType === "json") {
-      headers["Content-Type"] = "application/json";
-      if (params.body && method !== "GET") {
+    if (params.contentType === 'json') {
+      headers['Content-Type'] = 'application/json';
+      if (params.body && method !== 'GET') {
         body = JSON.stringify(params.body);
       }
-    } else if (params.contentType === "formdata" && params.body) {
+    } else if (params.contentType === 'formdata' && params.body) {
       const formData = new FormData();
       Object.entries(params.body).forEach(([key, value]) => {
         if (value === undefined || value === null) return;
@@ -70,7 +70,7 @@ export async function fetcher<T>(
       });
       body = formData;
     }
-    const path = params.path ? `/${params.path}` : "";
+    const path = params.path ? `/${params.path}` : '';
     const url = `${baseUrl}${params.endpoint}${path}${query}`;
     const res = await fetch(url, {
       method,
@@ -99,11 +99,9 @@ response: ${JSON.stringify(data)}
     console.error(error);
     return {
       data: {
-        message: "یک خطای ناشناخته رخ داد.",
+        message: 'یک خطای ناشناخته رخ داد.',
       } as unknown as T,
       status: 500,
     };
   }
 }
-
-
