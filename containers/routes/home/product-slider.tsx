@@ -91,8 +91,22 @@ const ProductSlider = (props: IProductSliderProps) => {
         .product-swiper .swiper-pagination-bullet-active {
           opacity: 1;
         }
+
+        .product-card .product-overlay {
+          opacity: 0;
+          transition: opacity 0.3s;
+        }
+
+        .product-card:hover .product-overlay {
+          opacity: 1;
+        }
+
+        .slider-group:hover .product-swiper-prev,
+        .slider-group:hover .product-swiper-next {
+          opacity: 1;
+        }
       `}</style>
-      <section className="relative w-full container group" dir="rtl">
+      <section className="relative w-full container slider-group" dir="rtl">
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <h2 className="text-lg text-primary font-bold">{props.title}</h2>
@@ -147,10 +161,10 @@ const ProductSlider = (props: IProductSliderProps) => {
                     <SwiperSlide key={product.id}>
                       <Link
                         href={`/products/${product.slug}`}
-                        className="group flex flex-col h-full border rounded-lg hover:border-primary duration-300 bg-white overflow-hidden cursor-pointer"
+                        className="product-card group flex flex-col h-full border rounded-lg hover:border-primary duration-300 bg-white overflow-hidden cursor-pointer"
                       >
                         <div className="relative w-full aspect-square overflow-hidden bg-gray-100">
-                          <div className="absolute inset-0 bg-black/20 flex items-center justify-center gap-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                          <div className="product-overlay absolute inset-0 bg-black/20 flex items-center justify-center gap-3 z-20 pointer-events-none">
                             <button
                               type="button"
                               onClick={(e) => handlePreviewClick(e, product)}
@@ -272,12 +286,12 @@ const ProductSlider = (props: IProductSliderProps) => {
                   );
                 })}
               </Swiper>
-              <div className="product-swiper-prev absolute -left-4 top-1/2 -translate-y-1/2 z-10 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="product-swiper-prev absolute -left-4 top-1/2 -translate-y-1/2 z-10 cursor-pointer opacity-0 slider-group:hover:opacity-100 transition-opacity duration-300">
                 <div className="flex items-center justify-center w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-colors duration-300">
                   <ChevronLeft className="size-6" />
                 </div>
               </div>
-              <div className="product-swiper-next absolute -right-3 top-1/2 -translate-y-1/2 z-10 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="product-swiper-next absolute -right-3 top-1/2 -translate-y-1/2 z-10 cursor-pointer opacity-0 slider-group:hover:opacity-100 transition-opacity duration-300">
                 <div className="flex items-center justify-center w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-colors duration-300">
                   <ChevronRight className="size-6" />
                 </div>
